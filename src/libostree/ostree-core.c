@@ -1737,8 +1737,10 @@ _ostree_stbuf_to_gfileinfo (const struct stat *stbuf)
   g_file_info_set_attribute_uint32 (ret, "unix::device", stbuf->st_dev);
   g_file_info_set_attribute_uint64 (ret, "unix::inode", stbuf->st_ino);
 
-  if (S_ISREG (mode))
+  if (S_ISREG (mode) || S_ISLNK(mode))
     g_file_info_set_attribute_uint64 (ret, "standard::size", stbuf->st_size);
+  else
+    g_file_info_set_attribute_uint64 (ret, "standard::size", 0);
 
   return ret;
 }
